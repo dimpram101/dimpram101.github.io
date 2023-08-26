@@ -1,0 +1,54 @@
+@media only screen and (max-width: 768px) {
+  .hamburger-menu {
+    display: block;
+    position: relative;
+    z-index: 1;
+  }
+
+  .header-title>h1 {
+    font-size: 20px;
+  }
+
+  .header-list {
+    display: none;
+  }
+
+  .content-body {
+    flex-direction: column;
+  }
+
+  .content-body .content-left {
+    width: 100%;
+  }
+
+  .content-body .content-right {
+    margin-top: 20px;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .card {
+    width: 100%;
+  }
+
+  footer .container {
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  footer .container .title>h1 {
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  footer .container .data {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  footer .container .data ul>h1 {
+    font-size: 16px;
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+}

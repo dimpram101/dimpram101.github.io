@@ -1,0 +1,25 @@
+@media only screen and (max-width: 1280px) {
+  .content-body {
+    flex-direction: column;
+  }
+
+  .content-body .content-left {
+    width: 100%;
+  }
+
+  .content-body .content-right {
+    margin-top: 20px;
+    width: 100%;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .card {
+    width: 100%;
+  }
+
+  .card .map {
+    height: 360px;
+  }
+}
