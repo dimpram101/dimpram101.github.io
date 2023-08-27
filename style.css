@@ -246,6 +246,10 @@ footer .container .data ul li {
   margin-left: 20px;
 }
 
+footer .container .data ul li a{
+  text-decoration: underline;
+}
+
 footer .container .data ul>h1 {
   font-weight: 500;
   margin-bottom: 8px;
