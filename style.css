@@ -138,7 +138,7 @@ header {
 }
 
 .header h1 {
-  font-weight: 500;
+  font-weight: 600;
   margin-bottom: 4px;
 }
 
@@ -156,7 +156,7 @@ header {
 
 .jurusan>h1 {
   font-size: 22px;
-  font-weight: 400;
+  font-weight: 500;
 }
 
 .jurusan .prodi {
