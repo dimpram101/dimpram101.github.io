@@ -52,3 +52,16 @@ input::-webkit-inner-spin-button {
 .zero {
   grid-column: 1 / span 2;
 }
+
+@media screen and (max-width: 1280px) {
+  .calculator-layout {
+    width: 90%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .number-box {
+    height: 100px;
+    font-size: 24px;
+  }
+}
