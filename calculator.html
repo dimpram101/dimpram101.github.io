@@ -71,54 +71,65 @@
   </div>
 
   <script>
-    let operatorRegex = /[+xX\-*/%]/;
+    const operatorRegex = /[+xX\-*/%]/;
     let isCalculatingPercent = false;
     let isSecondInput = false;
 
+    function getElementById(id) {
+      return document.getElementById(id);
+    }
+
     function resetDisplay() {
-      document.getElementById('displayInput').value = "0";
+      const display = getElementById('displayInput');
+      const error = getElementById('error');
+      display.value = "0";
+      error.innerHTML = "";
+      isCalculatingPercent = false;
       isSecondInput = false;
     }
 
     function addNumber(number) {
-      let display = document.getElementById('displayInput');
+      const display = getElementById('displayInput');
+      if (display.value === "Infinity") {
+        resetDisplay();
+      }
+
       if (display.value === "0" && number === 0) {
         return;
       }
 
-      if (display.value.substring(display.value.length - 2, display.value.length) == ' 0') {
-        display.value = display.value.slice(0, display.value.length - 1) + number
+      if (display.value.endsWith(' 0')) {
+        display.value = display.value.slice(0, -1) + number;
       } else if (display.value === "0" && number !== '.') {
-        display.value = `${number}`
+        display.value = `${number}`;
       } else {
-        display.value += `${number}`
+        display.value += `${number}`;
       }
     }
 
     function addComma() {
-      let display = document.getElementById('displayInput');
+      const display = getElementById('displayInput');
+      if (display.value === "Infinity") {
+        resetDisplay();
+      }
       const arr = display.value.split(" ");
-      if (arr.length > 2) {
-        if (arr[2].includes(".")) {
-          return;
-        }
-        display.value += "."
-      } else {
-        if (arr[0].includes(".")) {
-          return;
-        }
-        display.value += "."
+      const decimalSeparator = arr.length > 2 ? arr[2].includes(".") : arr[0].includes(".");
+      if (!decimalSeparator) {
+        display.value += ".";
       }
     }
 
     function addOperator(operator) {
-      let display = document.getElementById('displayInput');
+      const display = getElementById('displayInput');
+      const error = getElementById('error');
+      const lastTwoChars = display.value.slice(-2);
+
       if (!display.value) {
         return;
       }
 
-      if (operatorRegex.test(display.value.slice(-2))) {
-        display.value = display.value.slice(0, display.value.length - 2) + operator + " ";
+      if (operatorRegex.test(lastTwoChars)) {
+        display.value = display.value.slice(0, -2) + operator + " ";
         return;
       }
 
@@ -127,75 +138,94 @@
         isCalculatingPercent = true;
       }
 
-      if (isCalculatingPercent) return;
+      if (isCalculatingPercent) {
+        return;
+      }
 
       if (operatorRegex.test(display.value)) {
-        calculate()
+        calculate();
         display.value += ` ${operator} `;
-      }
-      else {
+      } else {
         display.value += ` ${operator} `;
       }
 
       isSecondInput = true;
+      error.innerHTML = "";
     }
 
     function calculate() {
-      let display = document.getElementById('displayInput');
+      const display = getElementById('displayInput');
+      const error = getElementById('error');
+
+      const lastTwoChars = display.value.slice(-2);
+
+      if (operatorRegex.test(lastTwoChars)) {
+        error.innerHTML = "<i>Terjadi kesalahan<i>";
+        return;
+      }
 
       if (isCalculatingPercent) {
         const arr = display.value.split("% of ");
-        display.value = `${(parseFloat(arr[0]) / 100) * arr[1]}`
+        display.value = `${(parseFloat(arr[0]) / 100) * arr[1]}`;
+        return;
+      }
+
+      if (display.value === "0 / 0") {
+        error.innerHTML = "<i>Terjadi kesalahan<i>";
         return;
       }
 
       const arr = display.value.split(' ');
-      if (arr[1] === "*") {
-        display.value = `${parseFloat(arr[0]) * parseFloat(arr[2])}`
-      } else if (arr[1] === "/") {
-        display.value = `${parseFloat(arr[0]) / parseFloat(arr[2])}`
-      } else if (arr[1] === "-") {
-        display.value = `${parseFloat(arr[0]) - parseFloat(arr[2])}`
-      } else if (arr[1] === "+") {
-        display.value = `${parseFloat(arr[0]) + parseFloat(arr[2])}`
-      }
+      const operand1 = parseFloat(arr[0]);
+      const operator = arr[1];
+      const operand2 = parseFloat(arr[2]);
 
-      document.getElementById('error').innerHTML = ""
+      switch (operator) {
+        case "*":
+          display.value = `${operand1 * operand2}`;
+          break;
+        case "/":
+          display.value = `${operand1 / operand2}`;
+          break;
+        case "-":
+          display.value = `${operand1 - operand2}`;
+          break;
+        case "+":
+          display.value = `${operand1 + operand2}`;
+          break;
+        default:
+          break;
+      }
+      error.innerHTML = "";
       isSecondInput = true;
     }
 
     function calculateSqrt() {
-      let display = document.getElementById('displayInput');
+      const display = getElementById('displayInput');
+      const error = getElementById('error');
+
       if (operatorRegex.test(display.value)) {
-        document.getElementById('error').innerHTML = "<i>Terjadi kesalahan<i>"
+        error.innerHTML = "<i>Terjadi kesalahan<i>";
       } else {
-        display.value = `${Math.sqrt(parseFloat(display.value))}`
+        display.value = `${Math.sqrt(parseFloat(display.value))}`;
       }
     }
 
     document.addEventListener('keydown', function (event) {
       if (event.key >= 0 && event.key <= 9 && event.key !== " ") {
-        addNumber(event.key)
+        addNumber(event.key);
       } else if (event.key === ".") {
-        addComma()
+        addComma();
       } else if (event.key === "Backspace") {
-        resetDisplay()
+        resetDisplay();
       } else if (event.key === "Enter") {
-        calculate()
-      } else if (event.key === "+") {
-        addOperator("+")
-      } else if (event.key === "-") {
-        addOperator("-")
-      } else if (event.key === "*") {
-        addOperator("*")
-      } else if (event.key === "/") {
-        addOperator("/")
-      } else if (event.key === "%") {
-        addOperator("%")
+        calculate();
+      } else if (event.key === "+" || event.key === "-" || event.key === "*" || event.key === "/" || event.key === "%") {
+        addOperator(event.key);
       } else if (event.key === " ") {
-        addOperator("+")
+        addOperator("+");
       }
-    })
+    });
   </script>
 </body>
 
