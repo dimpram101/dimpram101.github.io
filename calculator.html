@@ -128,8 +128,12 @@
         return;
       }
 
-      if (operatorRegex.test(lastTwoChars)) {
+      if (operatorRegex.test(lastTwoChars) && operator !== "%") {
         display.value = display.value.slice(0, -2) + operator + " ";
+        return;
+      }
+
+      if (operatorRegex.test(display.value) && operator === "%") {
         return;
       }
 
@@ -142,7 +146,7 @@
         return;
       }
 
-      if (operatorRegex.test(display.value)) {
+      if (operatorRegex.test(display.value) && operator !== "%") {
         calculate();
         display.value += ` ${operator} `;
       } else {
