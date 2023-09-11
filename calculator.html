@@ -171,6 +171,7 @@
       if (isCalculatingPercent) {
         const arr = display.value.split("% of ");
         display.value = `${(parseFloat(arr[0]) / 100) * arr[1]}`;
+        isCalculatingPercent = false;
         return;
       }
 
